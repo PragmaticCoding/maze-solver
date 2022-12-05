@@ -1,6 +1,7 @@
 package com.developIt;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -43,21 +44,24 @@ public class ViewBuilder implements Builder<Region> {
             rectangle.setArcHeight(5);
             rectangle.setArcWidth(5);
             rectangle.setStroke(Color.BLACK);
-            rectangle.fillProperty().bind(Bindings.createObjectBinding(() -> determineColour(square.isWall(), square.isOnPath()), square.wallProperty(), square.onPathProperty()));
-            ImageView pingu = new ImageView(this.getClass().getResource("pingu.png").toExternalForm());
-            pingu.setFitHeight(28);
-            pingu.setPreserveRatio(true);
-            pingu.visibleProperty().bind(square.pingouProperty());
-            ImageView fish = new ImageView(this.getClass().getResource("fish.png").toExternalForm());
-            fish.visibleProperty().bind(square.fishProperty());
-            fish.setFitHeight(28);
-            fish.setPreserveRatio(true);
+            rectangle.fillProperty().bind(Bindings.createObjectBinding(() ->
+                    determineColour(square.isWall(), square.isOnPath()), square.wallProperty(), square.onPathProperty()));
+            ImageView pingu = getImageView(square.pinguProperty(), "pingu.png");
+            ImageView fish = getImageView(square.fishProperty(), "fish.png");
             stackPane.getChildren().addAll(rectangle, pingu, fish);
             stackPane.setPickOnBounds(true);
             stackPane.setOnMouseClicked(evt -> clickHandler.accept(square.getLocation()));
             results.add(stackPane, square.getX(), square.getY());
         });
         return results;
+    }
+
+    private ImageView getImageView(BooleanProperty boundProperty, String fileName) {
+        ImageView pingu = new ImageView(this.getClass().getResource(fileName).toExternalForm());
+        pingu.setFitHeight(28);
+        pingu.setPreserveRatio(true);
+        pingu.visibleProperty().bind(boundProperty);
+        return pingu;
     }
 
     private Color determineColour(boolean wall, boolean onPath) {

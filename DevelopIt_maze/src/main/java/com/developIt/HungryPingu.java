@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 public class HungryPingu extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         stage.setScene(new Scene(new Controller().getView()));
         stage.show();
     }

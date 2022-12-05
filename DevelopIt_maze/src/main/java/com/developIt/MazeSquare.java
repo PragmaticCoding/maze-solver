@@ -15,7 +15,7 @@ public class MazeSquare {
     private final BooleanProperty wall = new SimpleBooleanProperty(false);
     private final BooleanProperty onPath = new SimpleBooleanProperty(false);
     private final BooleanProperty fish = new SimpleBooleanProperty(false);
-    private final BooleanProperty pingou = new SimpleBooleanProperty(false);
+    private final BooleanProperty pingu = new SimpleBooleanProperty(false);
     private Boolean usable = true;
 
     MazeSquare(Location location, Boolean isWall) {
@@ -120,15 +120,15 @@ public class MazeSquare {
         this.fish.set(fish);
     }
 
-    public boolean isPingou() {
-        return pingou.get();
+    public boolean isPingu() {
+        return pingu.get();
     }
 
-    public BooleanProperty pingouProperty() {
-        return pingou;
+    public BooleanProperty pinguProperty() {
+        return pingu;
     }
 
-    public void setPingou(boolean pingou) {
-        this.pingou.set(pingou);
+    public void setPingu(boolean pingu) {
+        this.pingu.set(pingu);
     }
 }

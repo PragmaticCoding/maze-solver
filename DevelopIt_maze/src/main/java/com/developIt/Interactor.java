@@ -1,5 +1,10 @@
 package com.developIt;
 
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.Transition;
+import javafx.util.Duration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +26,7 @@ public class Interactor {
             findSquare(square.getLocation().leftNeighbour()).ifPresent(square::setLeftNeighbour);
             findSquare(square.getLocation().upNeighbour()).ifPresent(square::setUpNeighbour);
         });
-        findSquare(new Location(0, 0)).ifPresent(square -> square.setPingou(true));
+        findSquare(new Location(0, 0)).ifPresent(square -> square.setPingu(true));
         findSquare(new Location(10, 11)).ifPresent(square -> square.setFish(true));
     }
 
@@ -29,12 +34,29 @@ public class Interactor {
         squares.stream().filter(square -> square.getLocation().equals(location)).findFirst().ifPresent(square -> square.setWall(!square.isWall()));
     }
 
-    void findPath() {
-        squares.stream().filter(MazeSquare::isFish).findFirst().ifPresent(end -> {
-            squares.stream().filter(MazeSquare::isPingou).findFirst().ifPresent(start -> {
-                findFromHere(start, end.getLocation()).forEach(square -> square.setOnPath(true));
-            });
-        });
+    List<MazeSquare> findPath() {
+        List<MazeSquare> results = new ArrayList<>();
+        squares.stream().filter(MazeSquare::isFish).findFirst().ifPresent(end ->
+                squares.stream().filter(MazeSquare::isPingu).findFirst().ifPresent(start ->
+                        results.addAll(findFromHere(start, end.getLocation()))
+                )
+        );
+        return results;
+    }
+
+
+    void animatePath(List<MazeSquare> path) {
+        final Animation animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(6000));
+                setInterpolator(Interpolator.LINEAR);
+            }
+
+            protected void interpolate(double frac) {
+                path.get(Math.round((path.size() - 1) * (float) frac)).setOnPath(true);
+            }
+        };
+        animation.play();
     }
 
     private List<MazeSquare> findFromHere(MazeSquare square, Location fishLocation) {

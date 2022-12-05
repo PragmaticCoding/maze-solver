@@ -5,30 +5,21 @@ import java.util.Arrays;
 import java.util.List;
 
 final class Location {
-    private int x;
-
-    public int X() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int Y() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
+    private final int x;
+    private final int y;
 
     public Location(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    private int y;
+    public int X() {
+        return x;
+    }
+
+    public int Y() {
+        return y;
+    }
 
     @Override
     public boolean equals(Object obj) {
